@@ -3,10 +3,6 @@
 
 using namespace std;
 
-void print(){ 
-    
-}
-
 int main(int argc, char** argv){
 
     int n; // number of denominations
