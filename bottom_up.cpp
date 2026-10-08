@@ -3,6 +3,10 @@
 
 using namespace std;
 
+void print(){ 
+    
+}
+
 int main(int argc, char** argv){
 
     int n; // number of denominations
@@ -22,36 +26,54 @@ int main(int argc, char** argv){
 
     int k;
     cin >> k;
+    vector<int> changeFor;
+    for (int i=0; i<k; i++) {
+        int t;
+        cin >> t;
+        changeFor.push_back(t);
+    }
 
-    for (int i = 1; i <= k; i++) { // number of sub solutions
-        cout << "i: " << i << endl;
-        int currDenom = 0;
-        int currBestLoc = i-1;
-        int currBest = solutions[i-1][n];
-        for (int j = 1; j < n; j++) { // number of denominations
-            if (i - denom[j] >= 0 && solutions[i - denom[j]][n] < currBest) {
-                currBest = solutions [i - denom[j]][n];
-                currBestLoc = i - denom[j];
-                currDenom = j;
+    int furthest = 1;
+
+    for (int h=0; h<k; h++) {
+        int change = changeFor[h];
+        if (change < furthest) {
+            std::cout << change << " cents =";
+            for (int i=n-1; i>=0; i--) {
+                if (solutions[change][i] > 0) {
+                    std::cout << " " << denom[i] << ":" << solutions[change][i];
+                }
             }
+            std::cout << endl;            
         }
-        solutions.push_back(solutions[currBestLoc]);
-        solutions[i][currDenom] += 1;
-        solutions[i][n] += 1;
+        else {
+            for (int i = furthest; i <= change; i++) { // number of sub solutions
+                int currDenom = 0;
+                int currBestLoc = i-1;
+                int currBest = solutions[i-1][n];
+                for (int j = 1; j < n; j++) { // number of denominations
+                    if (i - denom[j] >= 0 && solutions[i - denom[j]][n] < currBest) {
+                        currBest = solutions [i - denom[j]][n];
+                        currBestLoc = i - denom[j];
+                        currDenom = j;
+                    }
+                }
+                solutions.push_back(solutions[currBestLoc]);
+                solutions[i][currDenom] += 1;
+                solutions[i][n] += 1;
+            }
+            std::cout << change << " cents =";
+            for (int i=n-1; i>=0; i--) {
+                if (solutions[change][i] > 0) {
+                    std::cout << " " << denom[i] << ":" << solutions[change][i];
+                }
+            }
+            std::cout << endl;      
+            furthest = change + 1;      
+        }
+    }
 
-        cout << "Subsolution at " << i << ": ";
-        for (int j=0; j<n; j++) {
-            cout << solutions[i][j] << " ";
-        }
-        cout << endl;
-    }
-    cout << k << " cents = ";
-    for (int i=n-1; i>=0; i--) {
-        if (solutions[k][i] > 0) {
-            cout << denom[i] << ":" << solutions[k][i] << " ";
-        }
-    }
-    cout << endl;
+    
 
 	return 0;
 }
