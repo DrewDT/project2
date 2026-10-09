@@ -7,13 +7,20 @@ int n; // number of denominations
 vector<int> denom; // value of denominations
 vector<int> final;
 
+vector<vector<int>> savedSolutions;
+
 vector<int> solution(int value, vector<int> curr) {
     vector<int> best;
+    if (savedSolutions.size() > value && savedSolutions[value].size() > 0) {
+        return savedSolutions[value];
+    }
     for (int i = n-1; i >=0; i--) {
         int temp = denom[i];
         vector<int> temp_curr = curr;
         temp_curr.push_back(temp);
         if (value-temp == 0) {
+            savedSolutions[value] = temp_curr;
+            cout << "saved solution for " << value << endl;
             return temp_curr;
         }
         else if (value-temp > 0) {
@@ -23,6 +30,8 @@ vector<int> solution(int value, vector<int> curr) {
             }
         }
     }
+    savedSolutions[value] = best;
+    cout << "saved solution for " << value << endl;
     return best;
 }
 
@@ -42,6 +51,9 @@ int main() {
         int t;
         cin >> t;
         changeFor.push_back(t);
+        if (savedSolutions.size() <= t) {
+            savedSolutions.resize(t + 1);
+        }
     }
    
 
