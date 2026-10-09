@@ -1,3 +1,11 @@
+/*
+Names: Jacob Milne and Andrew Thomson
+Date: 10/9/2026
+Description: This program takes in a list of denominations and a list of values to make change for. 
+It then uses top-down dynamic programming without memoization to find the optimal way to make change for each value using the given denominations.
+The program outputs the number of each denomination used to make change for each value.
+*/
+
 #include <iostream>
 #include <vector>
 
