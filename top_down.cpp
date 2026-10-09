@@ -7,17 +7,20 @@ int n; // number of denominations
 vector<int> denom; // value of denominations
 vector<int> final;
 
+//vector<vector<int>> savedSolutions;
+
 vector<int> solution(int value, vector<int> curr) {
     vector<int> best;
+    //if (savedSolutions.size() > value && savedSolutions[value].size() > 0) {
+    //    return savedSolutions[value];
+    //}
     for (int i = n-1; i >=0; i--) {
         int temp = denom[i];
         vector<int> temp_curr = curr;
         temp_curr.push_back(temp);
-        //cout << "Temp curr:";
-        //for (int j = 0; j < temp_curr.size(); j++) {
-        //    cout << temp_curr[j] << " ";
-        //}
         if (value-temp == 0) {
+            //savedSolutions[value] = temp_curr;
+            //cout << "saved solution for " << value << endl;
             return temp_curr;
         }
         else if (value-temp > 0) {
@@ -27,6 +30,8 @@ vector<int> solution(int value, vector<int> curr) {
             }
         }
     }
+    //savedSolutions[value] = best;
+    //cout << "saved solution for " << value << endl;
     return best;
 }
 
@@ -46,15 +51,28 @@ int main() {
         int t;
         cin >> t;
         changeFor.push_back(t);
+        //if (savedSolutions.size() <= t) {
+        //    savedSolutions.resize(t + 1);
+        //}
     }
+   
 
-    vector<int> empty;
-    final = solution(changeFor[0], empty);
-
-    cout << "The best solution for " << changeFor[0] << " is: ";
-    for (int i=0; i<final.size(); i++) {
-        cout << final[i] << " ";
-    }
-    cout << endl;
+    for (int i = 0; i<k; i++) {
+        vector<int> empty;
+        final = solution(changeFor[i], empty);
+        std::cout << changeFor[i] << " cents =";
+        for (int j=n-1; j>=0; j--) {
+            int count = 0;
+            for (int k=0; k<final.size(); k++) {
+                if (final[k] == denom[j]) {
+                    count++;
+                }
+            }
+            if (count > 0) {
+                std::cout << " " << denom[j] << ":" << count;
+            }
+        }
+        cout << endl;
+    }     
     return 0;
 }
