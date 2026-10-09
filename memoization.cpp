@@ -9,29 +9,35 @@ vector<int> final;
 
 vector<vector<int>> savedSolutions;
 
-vector<int> solution(int value, vector<int> curr) {
+vector<int> solution(int value) {
     vector<int> best;
+    if (value == 0) {
+        return {};
+    }
     if (savedSolutions.size() > value && savedSolutions[value].size() > 0) {
         return savedSolutions[value];
     }
     for (int i = n-1; i >=0; i--) {
         int temp = denom[i];
-        vector<int> temp_curr = curr;
+        vector<int> temp_curr;
         temp_curr.push_back(temp);
         if (value-temp == 0) {
             savedSolutions[value] = temp_curr;
-            cout << "saved solution for " << value << endl;
             return temp_curr;
         }
         else if (value-temp > 0) {
-            vector<int> temp_best = solution(value-temp, temp_curr);
+            vector<int> temp_best = solution(value-temp);
+            if (temp_best.empty()) {
+                continue;
+            }
+            temp_best.push_back(temp);
+
             if (temp_best.size() < best.size() || best.size() == 0) {
                 best = temp_best;
             }
         }
     }
     savedSolutions[value] = best;
-    cout << "saved solution for " << value << endl;
     return best;
 }
 
@@ -58,8 +64,7 @@ int main() {
    
 
     for (int i = 0; i<k; i++) {
-        vector<int> empty;
-        final = solution(changeFor[i], empty);
+        final = solution(changeFor[i]);
         std::cout << changeFor[i] << " cents =";
         for (int j=n-1; j>=0; j--) {
             int count = 0;
